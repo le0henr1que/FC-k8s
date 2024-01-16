@@ -5,9 +5,10 @@ metadata:
 spec:
   selector: # <--- This is the selector that matches the labels in the deployment
     app: goserver
-  type: ClusterIP
+  type: NodePort
   ports:
     - name: goserver-service
       port: 80
       targetPort: 8000
       protocol: TCP
+      nodePort: 30001
