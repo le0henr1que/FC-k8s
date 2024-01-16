@@ -1,11 +1,19 @@
 package main 
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+	"os"
+)
 
 func main(){
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request){
-		w.Write([]byte("Hello full cycle !!!"))
+
+		name := os.Getenv("NAME")
+		age := os.Getenv("AGE")
+		fmt.Fprintf(w, "Hello %s, you are %s years old", name, age)
+		
 	})
 
-	http.ListenAndServe(":8000", nil)
+	http.ListenAndServe(":3000", nil)
 }

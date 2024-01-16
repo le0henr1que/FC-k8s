@@ -16,4 +16,15 @@ spec:
     spec:
       containers:
         - name: goserver
-          image: zaphodbrox/hello-go-k8s:v2
+          image: zaphodbrox/hello-go-k8s:v4
+          env:
+            - name: NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: goserver-env
+                  key: NAME
+            - name: AGE
+              valueFrom:
+                configMapKeyRef:
+                  name: goserver-env
+                  key: AGE
