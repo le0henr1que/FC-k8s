@@ -16,15 +16,21 @@ spec:
     spec:
       containers:
         - name: goserver
-          image: zaphodbrox/hello-go-k8s:v4
-          env:
-            - name: NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: goserver-env
-                  key: NAME
-            - name: AGE
-              valueFrom:
-                configMapKeyRef:
-                  name: goserver-env
-                  key: AGE
+          image: zaphodbrox/hello-go-k8s:v5.3.1
+          envFrom:
+            - configMapRef:
+                name: goserver-env
+            - secretRef:
+                name: goserver-secret
+
+          volumeMounts:
+            - name: config
+              mountPath: /go/myFamily
+
+      volumes:
+        - name: config
+          configMap:
+            name: configmap-family
+            items:
+              - key: members
+                path: family.txt
