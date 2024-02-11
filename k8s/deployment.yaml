@@ -8,7 +8,7 @@ spec:
   selector:
     matchLabels:
       app: goserver
-  replicas: 10
+  replicas: 1
   template:
     metadata:
       labels:
@@ -16,7 +16,41 @@ spec:
     spec:
       containers:
         - name: goserver
-          image: zaphodbrox/hello-go-k8s:v5.3.1
+          image: zaphodbrox/hello-go-k8s:v5.4
+
+          resources:
+            limits:
+              memory: "25Mi"
+              cpu: "0.05"
+            requests:
+              memory: "20Mi"
+              cpu: "0.05"
+
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            failureThreshold: 30
+            periodSeconds: 3
+
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            failureThreshold: 1
+            periodSeconds: 3
+            # initialDelaySeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            failureThreshold: 1
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            # initialDelaySeconds: 10
+
           envFrom:
             - configMapRef:
                 name: goserver-env
